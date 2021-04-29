@@ -2,25 +2,26 @@
 
 namespace HealthChecks
 {
-    internal class InMemoryApplicationStatus : ApplicationStatus
+    public class InMemoryApplicationStatus : IApplicationStatus
     {
         private bool _isHealthy = true;
 
-        public override Task<bool> IsHealthyAsync()
+        public Task<bool> IsHealthyAsync()
         {
             return Task.FromResult(_isHealthy);
         }
 
-        internal override Task SetHealthyAsync()
+        public Task SetHealthyAsync()
         {
             _isHealthy = true;
             return Task.CompletedTask;
         }
 
-        internal override Task SetUnhealthyAsync()
+        public Task SetUnhealthyAsync()
         {
             _isHealthy = false;
             return Task.CompletedTask;
         }
+
     }
 }

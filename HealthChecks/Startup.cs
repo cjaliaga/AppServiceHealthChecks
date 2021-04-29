@@ -15,11 +15,11 @@ namespace HealthChecks
 
             if (string.IsNullOrEmpty(instanceId))
             {
-                services.AddSingleton<ApplicationStatus, InMemoryApplicationStatus>();
+                services.AddSingleton<IApplicationStatus, InMemoryApplicationStatus>();
             } 
             else
             {
-                services.AddSingleton<ApplicationStatus, InFileApplicationStatus>();
+                services.AddSingleton<IApplicationStatus, InFileApplicationStatus>();
             }
 
         }
@@ -43,7 +43,7 @@ namespace HealthChecks
 
                 endpoints.MapGet("healthcheck", async context =>
                 {
-                    var status = context.RequestServices.GetRequiredService<ApplicationStatus>();
+                    var status = context.RequestServices.GetRequiredService<IApplicationStatus>();
                     var instanceId = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
                     var machineName = Environment.GetEnvironmentVariable("COMPUTERNAME");
 
@@ -61,7 +61,7 @@ namespace HealthChecks
 
                 endpoints.MapGet("disable", async context =>
                 {
-                    var status = context.RequestServices.GetRequiredService<ApplicationStatus>();
+                    var status = context.RequestServices.GetRequiredService<IApplicationStatus>();
 
                     await status.SetUnhealthyAsync();
 
@@ -73,7 +73,7 @@ namespace HealthChecks
 
                 endpoints.MapGet("enable", async context =>
                 {
-                    var status = context.RequestServices.GetRequiredService<ApplicationStatus>();
+                    var status = context.RequestServices.GetRequiredService<IApplicationStatus>();
 
                     await status.SetHealthyAsync();
 

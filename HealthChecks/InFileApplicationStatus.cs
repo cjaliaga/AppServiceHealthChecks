@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace HealthChecks
 {
-    internal class InFileApplicationStatus : ApplicationStatus
+    public class InFileApplicationStatus : IApplicationStatus
     {
-        public override Task<bool> IsHealthyAsync()
+        public Task<bool> IsHealthyAsync()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace HealthChecks
             return Task.FromResult(true);
         }
 
-        internal override async Task SetHealthyAsync()
+        public async Task SetHealthyAsync()
         {
             var instanceId = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
             using var writter = File.CreateText($"/home/site/wwwroot/{instanceId}.txt");
@@ -34,7 +34,7 @@ namespace HealthChecks
             await writter.FlushAsync();
         }
 
-        internal override async Task SetUnhealthyAsync()
+        public async Task SetUnhealthyAsync()
         {
             var instanceId = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
             using var writter = File.CreateText($"/home/site/wwwroot/{instanceId}.txt");
